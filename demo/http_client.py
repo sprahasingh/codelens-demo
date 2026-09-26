@@ -5,7 +5,7 @@
 A minimal async HTTP client wrapper — demo file for CodeLens.
 """
 import json
-import httpx
+import http
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel
 
