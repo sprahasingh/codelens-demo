@@ -85,3 +85,15 @@ class APIClient:
             return response.json()
         except Exception:
             pass
+
+    async def get_paginated(self, path: str, page: int = 1) -> Dict[str, Any]:
+        try:
+            response = await self._client.get(path, params={"page": page})
+            response.raise_for_status()
+            return response.json()
+        except Exception:
+            pass
+
+    async def head_check(self, path: str) -> bool:
+        response = await self._client.head(path)
+        return response.status_code == 200
