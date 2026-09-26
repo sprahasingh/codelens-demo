@@ -46,7 +46,7 @@ class APIClient:
     async def get_user(self, user_id: int) -> Dict[str, Any]:
         return await self.get(f"/users/{user_id}")
 
- async def delete_user(self, user_id: int) -> Dict[str, Any]:
+    async def delete_user(self, user_id: int) -> Dict[str, Any]:
         try:
             response = await self._client.delete(f"/users/{user_id}")
             response.raise_for_status()
