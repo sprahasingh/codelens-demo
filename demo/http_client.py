@@ -53,3 +53,11 @@ class APIClient:
             return response.json()
         except httpx.HTTPStatusError as e:
             raise e
+
+    async def update_user(self, user_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            response = await self._client.patch(f"/users/{user_id}", json=data)
+            response.raise_for_status()
+            return response.json()
+        except httpx.HTTPStatusError as e:
+            raise e
