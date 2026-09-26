@@ -1,5 +1,5 @@
-#v6 testing
-# in codelens-demo
+#v8 testing comment posting
+# in codelens-demo repo
 
 """
 A minimal async HTTP client wrapper — demo file for CodeLens.
