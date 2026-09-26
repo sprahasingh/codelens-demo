@@ -6,6 +6,12 @@ A minimal async HTTP client wrapper — demo file for CodeLens.
 import json
 import httpx
 from typing import Any, Dict, List, Optional
+from pydantic import BaseModel
+
+class UserConfig(BaseModel):
+    base_url: str           # should be AnyUrl
+    tags: list = []         # mutable default — pydantic flags this
+    email: str              # should be EmailStr
 
 class APIClient:
     def __init__(self, base_url: str, timeout: float = 5.0):
