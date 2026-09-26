@@ -1,10 +1,18 @@
+#v8 testing comment posting
+# in codelens-demo repo
+
 """
 A minimal async HTTP client wrapper — demo file for CodeLens.
 """
 import json
-import httpx
+import http
 from typing import Any, Dict, List, Optional
+from pydantic import BaseModel
 
+class UserConfig(BaseModel):
+    base_url: str           # should be AnyUrl
+    tags: list = []         # mutable default — pydantic flags this
+    email: str              # should be EmailStr
 
 class APIClient:
     def __init__(self, base_url: str, timeout: float = 5.0):
@@ -45,3 +53,47 @@ class APIClient:
 
     async def get_user(self, user_id: int) -> Dict[str, Any]:
         return await self.get(f"/users/{user_id}")
+
+    async def delete_user(self, user_id: int) -> Dict[str, Any]:
+        try:
+            response = await self._client.delete(f"/users/{user_id}")
+            response.raise_for_status()
+            return response.json()
+        except httpx.HTTPStatusError as e:
+            raise
+
+    async def update_user(self, user_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            response = await self._client.patch(f"/users/{user_id}", json=data)
+            response.raise_for_status()
+            return response.json()
+        except httpx.HTTPStatusError as e:
+            raise
+
+    async def patch_user(self, user_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            response = await self._client.patch(f"/users/{user_id}", json=data)
+            response.raise_for_status()
+            return response.json()
+        except httpx.HTTPStatusError as e:
+            raise e
+
+    async def bulk_delete(self, user_ids: List[int]) -> Dict[str, Any]:
+        try:
+            response = await self._client.post("/users/bulk-delete", json={"ids": user_ids})
+            response.raise_for_status()
+            return response.json()
+        except Exception:
+            pass
+
+    async def get_paginated(self, path: str, page: int = 1) -> Dict[str, Any]:
+        try:
+            response = await self._client.get(path, params={"page": page})
+            response.raise_for_status()
+            return response.json()
+        except Exception:
+            pass
+
+    async def head_check(self, path: str) -> bool:
+        response = await self._client.head(path)
+        return response.status_code == 200
